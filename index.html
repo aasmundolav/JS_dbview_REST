@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>My Title</title>
+<script type="text/javascript" src="urlparameter.js"></script>
+<script type="text/javascript" src="jquery-3.1.1.min.js"></script>
+</head>
+<body>
+
+<p id="demo"></p>
+
+<p id="seperator">-----------------</p>
+
+<p id="demo2">waiting for data...</br></br></p>
+
+<script>
+function formattext(key,value){
+if (key=='OBJECTID'){return ""}
+else if (key=='NAME'){return key + ":<b> <a href='https://en.wikipedia.org/wiki/" + value + "' target='_blank'>" + value + "</a></b></br>";}
+else {return key + ":<b> " + value + "</b></br>";}
+}
+
+
+var urlParams = getQueryStringAsObject();
+console.log("query.php?query="+urlParams['query'])
+$.getJSON("query.php?query="+urlParams['query'], function(json) {
+	document.getElementById("demo2").innerHTML = "RESULTS:</br>-----------------</br></br>";
+    console.log(json); // this will show the info it in firebug console
+	for (var i = 0; i < json.features.length; i++) {
+		for (key in json.features[i].attributes) {
+			if (json.features[i].attributes.hasOwnProperty(key)) {
+				document.getElementById("demo2").innerHTML += formattext(key, json.features[i].attributes[key]);
+			}
+		}
+		document.getElementById("demo2").innerHTML += "</br>-----------------</br></br>";
+	}
+});
+
+for (key in urlParams) {
+    if (urlParams.hasOwnProperty(key)) {
+        document.getElementById("demo").innerHTML += key + ":<b> " + urlParams[key] + "</b></br>";
+    }
+} 
+console.log(urlParams);
+
+
+
+
+
+
+</script>
+</body>
+</html>
